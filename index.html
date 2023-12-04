@@ -5,5 +5,21 @@
   <body>
     <h1>Welcome to My Website</h1>
     <p>This is my Demo</p>
+
+    <label for="param1">Param1:</label>
+    <input type="text" id="param1" name="param1"><br><br>
+
+    <label for="param2">Param2:</label>
+    <input type="text" id="param2" name="param2"><br><br>
+
+    <button onclick="showValues()">OK</button>
+
+    <script>
+      function showValues() {
+        const param1 = document.getElementById('param1').value;
+        const param2 = document.getElementById('param2').value;
+        alert("Param1: " + param1 + "\nParam2: " + param2);
+      }
+    </script>
   </body>
 </html>
