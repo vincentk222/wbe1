@@ -6,6 +6,11 @@ body {
 form {
   display: block;
   margin: 0 auto;
+  width: 30%;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  float: left;
 }
 
 #pdf-viewer {
