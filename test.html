@@ -1,24 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Page avec champ de saisie et fichier PDF</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Draggable Separator</title>
+  <style>
+    .separator {
+      height: 100vh; /* height of the separator */
+      background-color: #ccc; /* color or image of the separator */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1; /* make sure it's on top of everything else */
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="left">
-      <div class="input-field">
-        <label for="nom">Nom:</label>
-        <input type="text" id="nom" name="nom">
-      </div>
-    </div>
-    <div class="right">
-      <div class="pdf-viewer">
-        <object data="input.pdf" type="application/pdf">
-          <embed src="input.pdf" type="application/pdf" width="100%" height="100%"></embed>
-        </object>
-      </div>
-    </div>
-  </div>
+  <div class="separator"></div>
+  <script>
+    const separator = document.querySelector('.separator');
+    const minHeight = 100; /* minimum height of the separator */
+    const maxHeight = 500; /* maximum height of the separator */
+
+    function handleDragStart(event) {
+      event.dataTransfer.setData('height', separator.style.height);
+    }
+
+    function handleDragOver(event) {
+      const height = parseInt(event.dataTransfer.getData('height'));
+      if (height >= minHeight && height <= maxHeight) {
+        separator.style.height = height + 'px';
+      }
+    }
+
+    function handleDragEnd() {
+      separator.style.height = minHeight + 'px';
+    }
+
+    separator.addEventListener('mousedown', function(event) {
+      event.dataTransfer.setData('height', separator.style.height);
+    });
+
+    document.addEventListener('mouseup', function() {
+      separator.style.height = minHeight + 'px';
+    });
+
+    document.addEventListener('mousemove', function(event) {
+      const height = parseInt(event.dataTransfer.getData('height'));
+      if (height >= minHeight && height <= maxHeight) {
+        separator.style.height = height + 'px';
+      }
+    });
+  </script>
 </body>
 </html>
