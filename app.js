@@ -31,7 +31,7 @@ async function captureImage() {
       canvas.toBlob(blob => {
         // Send the image to the server using XMLHttpRequest or Fetch API
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://your-server.com/upload-image', true);
+        xhr.open('POST', 'https://test.vko.ovh/upload-image', true);
         xhr.send(blob);
       });
     });
