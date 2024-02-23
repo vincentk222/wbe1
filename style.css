@@ -15,14 +15,14 @@ form {
 
 #pdf-viewer {
   float: right;
-  width: 70%;
+  width: 50%;
   padding: 20px;
   background-color: #f1f1f1;
   border: 1px solid #ccc;
 }
 
 #pdf-viewer object {
-  width: 100%;
+  width: 90%;
   height: 500px;
   object-fit: cover;
   overflow-y: auto;
