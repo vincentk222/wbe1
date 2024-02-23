@@ -1,50 +1,27 @@
+/* CSS File */
+
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  text-align: center;
 }
 
-.container {
-  width: 100%;
-  height: 100vh; /* hauteur de la page */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+form {
+  display: block;
+  margin: 0 auto;
 }
 
-.left {
-  width: 25%;
-  height: 100%;
-  background-color: #f0f0f0;
+#right-side {
+  float: right;
+  width: 30%;
   padding: 20px;
-  box-sizing: border-box;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
 }
 
-.right {
-  width: 75%;
-  height: 100%;
-  background-color: #fff;
-  padding: 20px;
-  box-sizing: border-box;
+#right-side h2 {
+  margin-top: 0;
 }
 
-.input-field {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.input-field input[type="text"] {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.pdf-viewer {
-  width: 100%;
-  height: 75vh; /* hauteur de la partie droite */
-  object-fit: cover;
+#right-side p {
+  margin-bottom: 20px;
 }
