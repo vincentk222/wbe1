@@ -6,38 +6,22 @@
 <body>
     <button id="capture-button">Capture Image</button>
     <canvas id="canvas"></canvas>
-
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
     <script>
-        const captureButton = document.getElementById('capture-button');
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
 
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            captureButton.addEventListener('click', captureImage);
-        } else {
-            alert('This browser does not support MediaDevices API.');
-        }
-
-        async function captureImage() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-                const video = document.createElement('video');
-                video.srcObject = stream;
-                video.play();
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                captureButton.addEventListener('click', () => {
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob(blob => {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'https://test.vko.ovh/upload-image', true);
-                        xhr.send(blob);
-                    });
-                });
-            } catch (error) {
-                console.error('Error: ', error);
-            }
-        }
+        // ...
     </script>
 </body>
 </html>
