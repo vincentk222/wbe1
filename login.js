@@ -1,4 +1,28 @@
-// Fonction pour définir un cookie
+document.getElementById('login').addEventListener('click', function() {
+    let clientId = getCookie('clientId');
+    let tenantId = getCookie('tenantId');
+
+    if (!clientId || !tenantId) {
+        clientId = prompt("Please enter your clientId", "");
+        tenantId = prompt("Please enter your tenantId", "");
+        if (clientId && tenantId) {
+            setCookie('clientId', clientId, 7); // Stocker pour 7 jours
+            setCookie('tenantId', tenantId, 7); // Stocker pour 7 jours
+        }
+    }
+
+    if (clientId && tenantId) {
+        const redirectUri = encodeURIComponent(window.location.origin + '/viewer.html');
+        const scope = encodeURIComponent('openid profile User.Read');
+        const responseType = 'id_token token';
+        const authUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}&response_mode=fragment&nonce=${Math.random().toString(36).substr(2, 9)}`;
+
+        window.location.href = authUrl;
+    } else {
+        alert('ClientId and TenantId are required');
+    }
+});
+
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
@@ -9,7 +33,6 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
-// Fonction pour obtenir un cookie
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
@@ -20,62 +43,3 @@ function getCookie(name) {
     }
     return null;
 }
-
-// Fonction pour demander les identifiants à l'utilisateur et les stocker dans des cookies
-// Fonction pour demander les identifiants à l'utilisateur et les stocker dans des cookies
-function requestCredentialsAndStore() {
-    let tenantId = getCookie("tenantId");
-    let clientId = getCookie("clientId");
-
-    // Demande les identifiants à l'utilisateur avec des valeurs pré-remplies si disponibles
-    tenantId = prompt("Please enter your tenant ID:", tenantId || "");
-    clientId = prompt("Please enter your client ID:", clientId || "");
-    
-    // Vérifie si les valeurs ont été fournies avant de les stocker
-    if (tenantId && clientId) {
-        setCookie("tenantId", tenantId, 7);
-        setCookie("clientId", clientId, 7);
-    } else {
-        alert("Tenant ID and Client ID are required.");
-        return false;
-    }
-    return true;
-}
-
-
-// Fonction principale pour gérer la connexion
-function handleLogin() {
-    if (requestCredentialsAndStore()) {
-        let tenantId = getCookie("tenantId");
-        let clientId = getCookie("clientId");
-
-        // Construit l'URL pour la redirection vers l'authentification Microsoft
-        const microsoftLoginUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(window.location.origin + '/auth.html')}&response_mode=query&scope=openid%20profile%20email&state=12345`;
-
-        // Redirige vers l'URL de connexion Microsoft
-        window.location.href = microsoftLoginUrl;
-    }
-}
-
-// Associe l'événement de clic au bouton de connexion
-function init() {
-    document.getElementById('loginButton').addEventListener('click', handleLogin);
-}
-
-// S'assure que la fonction init est appelée lorsque la page est complètement chargée
-window.onload = init;
-
-
-
-
-// Fonction pour simuler une connexion et stocker les informations dans localStorage
-function simulateLogin() {
-    // Exemple de stockage du token d'authentification
-    localStorage.setItem('authToken', 'token_simulé');
-    // Redirection vers la page viewer.html
-	console.log(localStorage.getItem('authToken'));
-    window.location.href = 'viewer.html';
-}
-
-// Attache la fonction simulateLogin au clic du bouton
-document.getElementById('loginButton').addEventListener('click', simulateLogin);
