@@ -22,26 +22,26 @@ function getCookie(name) {
 }
 
 // Fonction pour demander les identifiants à l'utilisateur et les stocker dans des cookies
+// Fonction pour demander les identifiants à l'utilisateur et les stocker dans des cookies
 function requestCredentialsAndStore() {
     let tenantId = getCookie("tenantId");
     let clientId = getCookie("clientId");
 
-    // Si les cookies n'existent pas, demande les identifiants à l'utilisateur
-    if (!tenantId || !clientId) {
-        tenantId = prompt("Please enter your tenant ID:");
-        clientId = prompt("Please enter your client ID:");
-        
-        // Vérifie si les valeurs ont été fournies avant de les stocker
-        if (tenantId && clientId) {
-            setCookie("tenantId", tenantId, 7);
-            setCookie("clientId", clientId, 7);
-        } else {
-            alert("Tenant ID and Client ID are required.");
-            return false;
-        }
+    // Demande les identifiants à l'utilisateur avec des valeurs pré-remplies si disponibles
+    tenantId = prompt("Please enter your tenant ID:", tenantId || "");
+    clientId = prompt("Please enter your client ID:", clientId || "");
+    
+    // Vérifie si les valeurs ont été fournies avant de les stocker
+    if (tenantId && clientId) {
+        setCookie("tenantId", tenantId, 7);
+        setCookie("clientId", clientId, 7);
+    } else {
+        alert("Tenant ID and Client ID are required.");
+        return false;
     }
     return true;
 }
+
 
 // Fonction principale pour gérer la connexion
 function handleLogin() {
