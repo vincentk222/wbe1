@@ -65,10 +65,16 @@ function init() {
 // S'assure que la fonction init est appelée lorsque la page est complètement chargée
 window.onload = init;
 
-// Pseudo-code pour la gestion du login et du stockage du token
-function login() {
-    // Simule une authentification réussie et stocke un "token" fictif
-    localStorage.setItem('authToken', 'your_token_here');
-    // Redirection vers viewer.html après l'authentification
+
+
+
+// Fonction pour simuler une connexion et stocker les informations dans localStorage
+function simulateLogin() {
+    // Exemple de stockage du token d'authentification
+    localStorage.setItem('authToken', 'token_simulé');
+    // Redirection vers la page viewer.html
     window.location.href = 'viewer.html';
 }
+
+// Attache la fonction simulateLogin au clic du bouton
+document.getElementById('loginButton').addEventListener('click', simulateLogin);
