@@ -1,37 +1,4 @@
-function setLocalStorageItem(key, value) {
-    localStorage.setItem(key, value);
-}
-
-function getLocalStorageItem(key) {
-    return localStorage.getItem(key);
-}
-
-function requestCredentialsAndLogin() {
-    // Demande les identifiants à l'utilisateur
-    let tenantId = prompt("Please enter your tenant ID:");
-    let clientId = prompt("Please enter your client ID:");
-    
-    // Stocke les identifiants dans le localStorage
-    setLocalStorageItem("tenantId", tenantId);
-    setLocalStorageItem("clientId", clientId);
-    
-    // Vous pouvez ici initier le processus de connexion
-    // ou appeler une autre fonction qui le fait, en utilisant les identifiants stockés.
-}
-
-function login() {
-    const tenantId = getLocalStorageItem("tenantId");
-    const clientId = getLocalStorageItem("clientId");
-    
-    if (!tenantId || !clientId) {
-        alert("Tenant ID and Client ID are required.");
-        return;
-    }
-    
-    // Construisez ici votre URL d'authentification avec tenantId et clientId
-    // et redirigez l'utilisateur pour la connexion.
-}
-
+// Fonction pour définir un cookie
 function setCookie(name, value, days) {
     var expires = "";
     if (days) {
@@ -42,6 +9,7 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
+// Fonction pour obtenir un cookie
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
@@ -52,21 +20,39 @@ function getCookie(name) {
     }
     return null;
 }
-function requestCredentialsAndLogin() {
-    // Vérifie si les cookies existent déjà
+
+// Fonction pour demander les identifiants à l'utilisateur et les stocker dans des cookies
+function requestCredentialsAndStore() {
     let tenantId = getCookie("tenantId");
     let clientId = getCookie("clientId");
 
-    // Si non présents, demande à l'utilisateur et met à jour les cookies
+    // Demande les identifiants à l'utilisateur si non présents
     if (!tenantId) {
-        tenantId = prompt("Please enter your tenant ID:", tenantId);
-        setCookie("tenantId", tenantId, 7); // Stocke dans les cookies pour 7 jours
+        tenantId = prompt("Please enter your tenant ID:");
+        if (tenantId) { // Vérifie si l'utilisateur a bien saisi une valeur
+            setCookie("tenantId", tenantId, 7); // Stocke dans les cookies pour 7 jours
+        }
     }
 
     if (!clientId) {
-        clientId = prompt("Please enter your client ID:", clientId);
-        setCookie("clientId", clientId, 7); // Stocke dans les cookies pour 7 jours
+        clientId = prompt("Please enter your client ID:");
+        if (clientId) { // Vérifie si l'utilisateur a bien saisi une valeur
+            setCookie("clientId", clientId, 7); // Stocke dans les cookies pour 7 jours
+        }
     }
-    
-    // Ici, vous pouvez initier le processus de connexion en utilisant les valeurs récupérées
 }
+
+// Fonction principale pour gérer la connexion
+function handleLogin() {
+    requestCredentialsAndStore();
+    // Après avoir obtenu et stocké les identifiants, vous pouvez ici initier le processus de connexion.
+    // Ce processus dépend de l'API spécifique que vous utilisez et de la manière dont elle gère l'authentification.
+}
+
+// Exécute la fonction principale lorsque le bouton de connexion est cliqué
+function init() {
+    document.getElementById('loginButton').addEventListener('click', handleLogin);
+}
+
+// Assure que le script s'exécute après le chargement complet de la page
+window.onload = init;
