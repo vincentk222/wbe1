@@ -1,23 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Viewer Page</title>
-<script>
-    function checkAuthentication() {
-        const authToken = localStorage.getItem('authToken');
-        if (!authToken) {
-            alert("Vous n'êtes pas authentifié. Vous allez être redirigé vers la page de connexion.");
-            window.location.href = 'login.html';
-        } else {
-            alert("Vous êtes authentifié");
-        }
-    }
-    window.onload = checkAuthentication;
-</script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewer</title>
+    <script src="viewer.js"></script>
 </head>
-<body>
+<body onload="checkAuthentication()">
     <h1>Bienvenue sur la page Viewer</h1>
-    <!-- Contenu de la page -->
 </body>
 </html>
