@@ -64,3 +64,11 @@ function init() {
 
 // S'assure que la fonction init est appelée lorsque la page est complètement chargée
 window.onload = init;
+
+// Pseudo-code pour la gestion du login et du stockage du token
+function login() {
+    // Simule une authentification réussie et stocke un "token" fictif
+    localStorage.setItem('authToken', 'your_token_here');
+    // Redirection vers viewer.html après l'authentification
+    window.location.href = 'viewer.html';
+}

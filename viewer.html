@@ -2,22 +2,19 @@
 <html>
 <head>
     <title>Viewer Page</title>
-    <script>
-        function checkAuthentication() {
-            const authToken = localStorage.getItem('authToken');
-            
-            if (!authToken) {
-                // Afficher un popup d'avertissement avant de rediriger
-                alert("Vous n'êtes pas authentifié. Vous allez être redirigé vers la page de connexion.");
-                window.location.href = 'login.html';
-            } else {
-                alert("Vous êtes authentifié");
-                // Ici, vous pouvez ajouter la logique pour valider le token si nécessaire
-            }
+<script>
+    function checkAuthentication() {
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            alert("Vous n'êtes pas authentifié. Vous allez être redirigé vers la page de connexion.");
+            window.location.href = 'login.html';
+        } else {
+            alert("Vous êtes authentifié");
         }
+    }
+    window.onload = checkAuthentication;
+</script>
 
-        window.onload = checkAuthentication;
-    </script>
 </head>
 <body>
     <h1>Bienvenue sur la page Viewer</h1>
