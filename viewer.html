@@ -4,15 +4,15 @@
     <title>Viewer Page</title>
     <script>
         function checkAuthentication() {
-            // Exemple: vérification de la présence d'un token dans localStorage
             const authToken = localStorage.getItem('authToken');
             
-            // Vérifiez ici si le token est présent et valide
-            // Cette vérification est simplifiée pour l'exemple
-            // Dans une application réelle, vous pourriez vouloir valider le token côté serveur
-            if (!authToken) {
-                // Si non authentifié, rediriger vers la page de login
+            // Simuler la vérification de la validité du token
+            if (!authAuthToken) {
+                // Si le token est absent ou invalide, rediriger vers la page de login
                 window.location.href = 'login.html';
+            } else {
+                // Logique pour valider le token (côté client ou en envoyant une requête à votre serveur)
+                // Si le token est expiré ou invalide, redirigez également vers login.html
             }
         }
 
