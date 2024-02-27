@@ -73,6 +73,7 @@ function simulateLogin() {
     // Exemple de stockage du token d'authentification
     localStorage.setItem('authToken', 'token_simulé');
     // Redirection vers la page viewer.html
+	console.log(localStorage.getItem('authToken'));
     window.location.href = 'viewer.html';
 }
 
