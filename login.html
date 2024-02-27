@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil | Test VKO</title>
+    <title>Login Page</title>
+    <script>
+        function login() {
+            // Exemple de redirection pour l'authentification OpenID Connect
+            // Remplacez les valeurs PLACEHOLDER par vos valeurs réelles
+            const tenantId = 'YOUR_TENANT_ID'; // Remplacez par votre tenant ID
+            const clientId = 'YOUR_CLIENT_ID'; // Remplacez par votre client ID
+            const redirectUri = encodeURIComponent('YOUR_REDIRECT_URI'); // Remplacez par votre URI de redirection
+            const scope = encodeURIComponent('openid profile'); // Scopes demandés
+            const responseType = 'code'; // Type de réponse attendue
+
+            // Construction de l'URL d'authentification
+            const authUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}&response_mode=query`;
+
+            // Redirection vers l'URL d'authentification
+            window.location.href = authUrl;
+        }
+    </script>
 </head>
 <body>
-    <h1>Bienvenue sur Test VKO 2</h1>
-    <p>Ceci est un exemple de site web hébergé sur GitHub Pages.</p>
+    <!-- Bouton de connexion -->
+    <div style="text-align: center; margin-top: 20%;">
+        <button onclick="login()">Login with Microsoft</button>
+    </div>
 </body>
 </html>
