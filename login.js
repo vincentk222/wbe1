@@ -2,16 +2,14 @@ document.getElementById('login').addEventListener('click', function() {
     let clientId = getCookie('clientId');
     let tenantId = getCookie('tenantId');
 
-    if (!clientId || !tenantId) {
-        clientId = prompt("Please enter your clientId", "");
-        tenantId = prompt("Please enter your tenantId", "");
-        if (clientId && tenantId) {
-            setCookie('clientId', clientId, 7); // Stocker pour 7 jours
-            setCookie('tenantId', tenantId, 7); // Stocker pour 7 jours
-        }
-    }
+    // Pré-remplir les valeurs dans les prompts si elles existent déjà
+    clientId = prompt("Please enter your clientId", clientId || "");
+    tenantId = prompt("Please enter your tenantId", tenantId || "");
 
     if (clientId && tenantId) {
+        setCookie('clientId', clientId, 7); // Stocker pour 7 jours
+        setCookie('tenantId', tenantId, 7); // Stocker pour 7 jours
+
         const redirectUri = encodeURIComponent(window.location.origin + '/viewer.html');
         const scope = encodeURIComponent('openid profile User.Read');
         const responseType = 'id_token token';
