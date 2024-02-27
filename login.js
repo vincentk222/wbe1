@@ -8,3 +8,16 @@ document.getElementById('loginButton').addEventListener('click', function() {
 
     window.location.href = url;
 });
+
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+// Exemple d'utilisation après avoir reçu le token
+setCookie('openid_token', 'VOTRE_TOKEN_ICI', 1);
