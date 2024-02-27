@@ -45,9 +45,20 @@ function requestCredentialsAndStore() {
 // Fonction principale pour gérer la connexion
 function handleLogin() {
     requestCredentialsAndStore();
-    // Après avoir obtenu et stocké les identifiants, vous pouvez ici initier le processus de connexion.
-    // Ce processus dépend de l'API spécifique que vous utilisez et de la manière dont elle gère l'authentification.
+
+    let tenantId = getCookie("tenantId");
+    let clientId = getCookie("clientId");
+
+    if (tenantId && clientId) {
+        // Redirige l'utilisateur vers l'URL de connexion de Microsoft
+        const microsoftLoginUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(window.location.origin + '/auth.html')}&response_mode=query&scope=openid%20profile%20email&state=12345`;
+
+        window.location.href = microsoftLoginUrl;
+    } else {
+        alert("Tenant ID and Client ID are required.");
+    }
 }
+
 
 // Exécute la fonction principale lorsque le bouton de connexion est cliqué
 function init() {
