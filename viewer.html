@@ -1,1 +1,26 @@
-ok viewer
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Viewer Page</title>
+    <script>
+        function checkAuthentication() {
+            // Exemple: vérification de la présence d'un token dans localStorage
+            const authToken = localStorage.getItem('authToken');
+            
+            // Vérifiez ici si le token est présent et valide
+            // Cette vérification est simplifiée pour l'exemple
+            // Dans une application réelle, vous pourriez vouloir valider le token côté serveur
+            if (!authToken) {
+                // Si non authentifié, rediriger vers la page de login
+                window.location.href = 'login.html';
+            }
+        }
+
+        window.onload = checkAuthentication;
+    </script>
+</head>
+<body>
+    <h1>Bienvenue sur la page Viewer</h1>
+    <!-- Contenu de la page -->
+</body>
+</html>
