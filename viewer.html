@@ -6,13 +6,12 @@
         function checkAuthentication() {
             const authToken = localStorage.getItem('authToken');
             
-            // Simuler la vérification de la validité du token
-            if (!authAuthToken) {
-                // Si le token est absent ou invalide, rediriger vers la page de login
+            if (!authToken) {
+                // Afficher un popup d'avertissement avant de rediriger
+                alert("Vous n'êtes pas authentifié. Vous allez être redirigé vers la page de connexion.");
                 window.location.href = 'login.html';
             } else {
-                // Logique pour valider le token (côté client ou en envoyant une requête à votre serveur)
-                // Si le token est expiré ou invalide, redirigez également vers login.html
+                // Ici, vous pouvez ajouter la logique pour valider le token si nécessaire
             }
         }
 
