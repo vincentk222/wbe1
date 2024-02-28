@@ -80,3 +80,30 @@ function saveData() {
     alert('Data saved successfully.');
 }
 
+// Function to update session expiry display
+function updateExpiryDisplay() {
+    const expiryTime = new Date(new Date().getTime() + 60000); // 1 minute from now
+    document.getElementById('sessionExpiry').innerText = 'Session expires at: ' + expiryTime.toLocaleTimeString();
+}
+
+// Updated setPasswordSession to include expiry display update
+function setPasswordSession(password) {
+    sessionPassword = password;
+    clearTimeout(passwordTimer);
+    passwordTimer = setTimeout(() => {
+        sessionPassword = null;
+        alert('Session expired. Please enter password again.');
+        document.getElementById('sessionExpiry').innerText = 'Session has expired.';
+    }, 60000); // 1 minute session timeout
+    updateExpiryDisplay(); // Update expiry time display
+}
+
+// Function to reset session
+function resetSession() {
+    sessionPassword = null;
+    clearTimeout(passwordTimer);
+    alert('Session has been reset.');
+    document.getElementById('sessionExpiry').innerText = 'Session has been reset.';
+}
+
+// Remember to add an element with id="sessionExpiry" in your HTML to display the session expiry information.
