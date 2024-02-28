@@ -8,39 +8,27 @@
 </head>
 <body>
     <script>
-        const msalConfig = {
-            auth: {
-                clientId: localStorage.getItem('clientID'),
-                authority: `https://login.microsoftonline.com/${localStorage.getItem('tenantID')}`,
-                redirectUri: window.location.origin + "/auth.html"
+        // Supposons que vous ayez déjà configuré MSAL et que vous avez récupéré le token d'accès.
+        fetch("https://graph.microsoft.com/v1.0/me", {
+            headers: {
+                "Authorization": `Bearer ${tokenResponse.accessToken}`
             }
-        };
-    
-        const myMSALObj = new msal.PublicClientApplication(msalConfig);
-        
-        myMSALObj.handleRedirectPromise().then(response => {
-            if (response) {
-                const account = response.account;
-                myMSALObj.acquireTokenSilent({
-                    scopes: ["User.Read"],
-                    account: account
-                }).then(response => {
-                    // Avec le token, appelez Microsoft Graph API pour récupérer les infos utilisateur
-                    console.log(response);
-                    // Traitez la réponse ici
-                }).catch(err => {
-                    // Gestion des erreurs
-                    console.error(err);
-                });
-            } else {
-                // Gestion de l'absence de réponse de redirection
-                console.log("Aucune réponse de redirection. L'utilisateur pourrait charger la page directement ou la réponse de connexion est dans le cache.");
-            }
-        }).catch(err => {
-            // Gestion des erreurs lors de la capture de la réponse de redirection
-            console.error(err);
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userName', data.displayName);
+            localStorage.setItem('userEmail', data.mail || data.userPrincipalName); // Utilisez userPrincipalName si mail est vide
+            // Stocker également l'heure actuelle comme heure de connexion
+            localStorage.setItem('loginTime', new Date().toString());
+            
+            window.location.href = 'test.html'; // Redirigez vers test.html
+        })
+        .catch(error => {
+            console.error("Erreur lors de la récupération des informations de l'utilisateur : ", error);
         });
     </script>
+    
     
 </body>
 </html>
