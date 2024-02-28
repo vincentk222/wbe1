@@ -13,31 +13,35 @@
         document.querySelector('.login-button').addEventListener('click', function() {
             let clientID = localStorage.getItem('clientID') || '';
             let tenantID = localStorage.getItem('tenantID') || '';
-        
+
             clientID = prompt('Enter your Client ID:', clientID);
             tenantID = prompt('Enter your Tenant ID:', tenantID);
-        
+
             if(clientID && tenantID) {
                 localStorage.setItem('clientID', clientID);
                 localStorage.setItem('tenantID', tenantID);
-        
-                // Azure AD OpenID Connect URL
+
+                const uniqueStateValue = generateUniqueState();
+                localStorage.setItem('oauthState', uniqueStateValue);
+
                 const authorizationEndpoint = `https://login.microsoftonline.com/${tenantID}/oauth2/v2.0/authorize`;
                 const responseType = 'code';
-                const redirectUri = encodeURIComponent(window.location.origin + '/auth.html'); // Mise à jour pour utiliser auth.html
-                const scope = encodeURIComponent('openid profile'); // Inclure d'autres étendues au besoin
-                const state = encodeURIComponent('YOUR_UNIQUE_STATE_VALUE'); // Devrait être une valeur de session unique pour atténuer CSRF
-                const nonce = encodeURIComponent('YOUR_UNIQUE_NONCE_VALUE'); // Devrait être une valeur unique pour chaque demande pour atténuer les attaques par rejeu de jeton
-        
-                // Construire l'URL complète
+                const redirectUri = encodeURIComponent(window.location.origin + '/auth.html');
+                const scope = encodeURIComponent('openid profile');
+                const state = encodeURIComponent(uniqueStateValue);
+                const nonce = encodeURIComponent(generateUniqueState()); // Utiliser une logique similaire pour `nonce`
+
                 const authUrl = `${authorizationEndpoint}?client_id=${clientID}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&nonce=${nonce}&response_mode=fragment`;
-        
-                // Rediriger vers Azure AD pour l'authentification
+
                 window.location.href = authUrl;
             } else {
                 alert('Authentication cancelled or incomplete.');
             }
         });
+
+        function generateUniqueState() {
+            return [...Array(30)].map(() => Math.random().toString(36)[2]).join('');
+        }
     </script>
 </body>
 </html>
