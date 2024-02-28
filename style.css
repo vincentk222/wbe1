@@ -6,8 +6,9 @@ body, html {
 
 .background {
     background-image: url('background-image-url.png');
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat; /* This will prevent the image from repeating */
     height: 100%;
     display: flex;
     justify-content: center;
