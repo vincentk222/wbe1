@@ -14,6 +14,7 @@ async function requestAccessToken(code) {
     body.append('code', code);
     body.append('redirect_uri', redirectUri);
     body.append('code_verifier', codeVerifier);
+    console.log('Code js:', code);
   
     try {
       const response = await fetch(tokenEndpoint, {
@@ -62,7 +63,6 @@ async function requestAccessToken(code) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const code = urlParams.get('code');
-  console.log('Code js:', code);
 
   if (code) {
     requestAccessToken(code);
