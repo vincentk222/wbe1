@@ -45,10 +45,7 @@ function generateCodeVerifierAndChallenge() {
   }
     
   function deleteValues() {
-    // Clear the values from localStorage
-    localStorage.removeItem('clientId');
-    localStorage.removeItem('tenantId');
-    localStorage.removeItem('scope');
+
   
     // Clear the input fields
     document.getElementById('clientIdInput').value = '';
