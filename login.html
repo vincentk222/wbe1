@@ -1,61 +1,43 @@
+<!-- login.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        /* Simple CSS to center the login button */
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .login-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Connexion</title>
 </head>
 <body>
+    <button class="login-button">Se connecter avec Azure AD</button>
 
-<button class="login-button">Login with Azure</button>
-
-<script>
-    document.querySelector('.login-button').addEventListener('click', function() {
-        let clientID = localStorage.getItem('clientID') || '';
-        let tenantID = localStorage.getItem('tenantID') || '';
-    
-        clientID = prompt('Enter your Client ID:', clientID);
-        tenantID = prompt('Enter your Tenant ID:', tenantID);
-    
-        if(clientID && tenantID) {
-            localStorage.setItem('clientID', clientID);
-            localStorage.setItem('tenantID', tenantID);
-    
-            // Azure AD OpenID Connect URL
-            const authorizationEndpoint = `https://login.microsoftonline.com/${tenantID}/oauth2/v2.0/authorize`;
-            const responseType = 'code';
-            const redirectUri = encodeURIComponent(window.location.origin + '/auth.html'); // Updated to use auth.html
-            const scope = encodeURIComponent('openid profile'); // Include other scopes as needed
-            const state = encodeURIComponent('YOUR_UNIQUE_STATE_VALUE'); // Should be a unique session value to mitigate CSRF
-            const nonce = encodeURIComponent('YOUR_UNIQUE_NONCE_VALUE'); // Should be a unique value for each request to mitigate token replay attacks
-    
-            // Construct the full URL
-            const authUrl = `${authorizationEndpoint}?client_id=${clientID}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&nonce=${nonce}&response_mode=fragment`;
-    
-            // Redirect to Azure AD for authentication
-            window.location.href = authUrl;
-        } else {
-            alert('Authentication cancelled or incomplete.');
-        }
-    });
+    <script>
+        document.querySelector('.login-button').addEventListener('click', function() {
+            let clientID = localStorage.getItem('clientID') || '';
+            let tenantID = localStorage.getItem('tenantID') || '';
+        
+            clientID = prompt('Enter your Client ID:', clientID);
+            tenantID = prompt('Enter your Tenant ID:', tenantID);
+        
+            if(clientID && tenantID) {
+                localStorage.setItem('clientID', clientID);
+                localStorage.setItem('tenantID', tenantID);
+        
+                // Azure AD OpenID Connect URL
+                const authorizationEndpoint = `https://login.microsoftonline.com/${tenantID}/oauth2/v2.0/authorize`;
+                const responseType = 'code';
+                const redirectUri = encodeURIComponent(window.location.origin + '/auth.html'); // Mise à jour pour utiliser auth.html
+                const scope = encodeURIComponent('openid profile'); // Inclure d'autres étendues au besoin
+                const state = encodeURIComponent('YOUR_UNIQUE_STATE_VALUE'); // Devrait être une valeur de session unique pour atténuer CSRF
+                const nonce = encodeURIComponent('YOUR_UNIQUE_NONCE_VALUE'); // Devrait être une valeur unique pour chaque demande pour atténuer les attaques par rejeu de jeton
+        
+                // Construire l'URL complète
+                const authUrl = `${authorizationEndpoint}?client_id=${clientID}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&nonce=${nonce}&response_mode=fragment`;
+        
+                // Rediriger vers Azure AD pour l'authentification
+                window.location.href = authUrl;
+            } else {
+                alert('Authentication cancelled or incomplete.');
+            }
+        });
     </script>
-    
-    
-
 </body>
 </html>
