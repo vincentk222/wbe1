@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <title>Authentication Redirect</title>
     <script>
-        window.onload = function() {
-            // Simule le traitement de l'authentification (échange de code, validation, etc.)
-            // En pratique, cela impliquerait des appels serveur sécurisés.
-            
-            // Après traitement réussi, rediriger vers viewer.html
-            window.location.href = 'viewer.html';
-        };
+window.onload = function() {
+    // Parse the URL fragment to extract the authorization code, state, etc.
+    const authResponse = new URLSearchParams(window.location.hash.substring(1));
+    const code = authResponse.get('code');
+    const state = authResponse.get('state');
+    // Implement state validation here to protect against CSRF
+
+    if (code) {
+        // Proceed to exchange the code for tokens
+        console.log("Authorization code:", code);
+        // Here you'd implement the code exchange step
+    } else {
+        // Handle error or indicate that user is not authenticated
+        console.log("User is not authenticated.");
+    }
+};
+
     </script>
 </head>
 <body>
