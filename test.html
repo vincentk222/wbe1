@@ -20,12 +20,31 @@ window.onload = function() {
         window.location.href = 'login.html';
     } else {
         // Extend the session for another minute on page load
-        const newExpiryTime = new Date(now.getTime() + 1*60*1000);
+        const newExpiryTime = new Date(now.getTime() + 1*60*1000); // 1 minute from now
         localStorage.setItem('sessionExpiry', newExpiryTime.toISOString());
+
+        // Display authentication and session details for debugging
+        displayAuthDetails();
     }
 };
+
+function displayAuthDetails() {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const sessionExpiry = localStorage.getItem('sessionExpiry');
+    // Example: Displaying isAuthenticated and sessionExpiry. Add more details as needed.
+    document.getElementById('authDetails').innerHTML = `
+        <p>Authenticated: ${isAuthenticated}</p>
+        <p>Session Expires: ${sessionExpiry}</p>
+    `;
+}
+
 </script>
 <h1>Protected Content</h1>
 <p>If you're seeing this, you're authenticated and your session is valid.</p>
+
+<div id="authDetails">
+    <!-- Authentication details will be displayed here -->
+</div>
+
 </body>
 </html>
