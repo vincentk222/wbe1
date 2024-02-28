@@ -3,52 +3,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Protégée</title>
 </head>
 <body>
-<script>
-window.onload = function() {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    const sessionExpiry = localStorage.getItem('sessionExpiry');
-    const now = new Date();
+    <h1>Contenu Protégé</h1>
+    <p>Si vous voyez cette page, vous êtes authentifié.</p>
 
-    if (!isAuthenticated || !sessionExpiry || now > new Date(sessionExpiry)) {
-        // La session a expiré ou l'utilisateur n'est pas authentifié, effacer la session et rediriger vers login.html
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('sessionExpiry');
-        window.location.href = 'login.html';
-    } else {
-        // Étendre la session pour une autre minute lors du chargement de la page
-        const newExpiryTime = new Date(now.getTime() + 1*60*1000); // 1 minute à partir de maintenant
-        localStorage.setItem('sessionExpiry', newExpiryTime.toISOString());
-
-        // Afficher les détails d'authentification et de session pour le débogage
-        displayAuthDetails();
-    }
-};
-
-function displayAuthDetails() {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    const sessionExpiry = localStorage.getItem('sessionExpiry');
-    const userName = localStorage.getItem('userName'); // Supposons que cela a été stocké
-    const userEmail = localStorage.getItem('userEmail'); // Supposons que cela a été stocké
-    
-    // Exemple : Affichage de isAuthenticated, sessionExpiry, et détails de l'utilisateur. Ajouter plus de détails au besoin.
-    document.getElementById('authDetails').innerHTML = `
-        <p>Authentifié : ${isAuthenticated}</p>
-        <p>Expiration de la session : ${sessionExpiry}</p>
-        <p>Nom de l'utilisateur : ${userName}</p>
-        <p>Email de l'utilisateur : ${userEmail}</p>
-    `;
-}
-</script>
-<h1>Contenu Protégé</h1>
-<p>Si vous voyez ceci, vous êtes authentifié et votre session est valide.</p>
-
-<div id="authDetails">
-    <!-- Les détails d'authentification seront affichés ici -->
-</div>
-
+    <script>
+        if (!localStorage.getItem('isAuthenticated')) {
+            alert("Non authentifié. Redirection vers la page de connexion.");
+            window.location.href = 'login.html';
+        }
+        // Ici, vous pouvez ajouter plus de logique pour afficher les informations de l'utilisateur, etc.
+    </script>
 </body>
 </html>
