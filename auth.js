@@ -14,7 +14,7 @@ async function requestAccessToken(code) {
     body.append('code', code);
     body.append('redirect_uri', redirectUri);
     body.append('code_verifier', codeVerifier);
-    console.log('Code js2:', code);
+    console.log('Code js22:', code);
   
     try {
       const response = await fetch(tokenEndpoint, {
