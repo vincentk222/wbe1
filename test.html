@@ -1,10 +1,10 @@
 <!-- test.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protected Page</title>
+    <title>Page Protégée</title>
 </head>
 <body>
 <script>
@@ -14,16 +14,16 @@ window.onload = function() {
     const now = new Date();
 
     if (!isAuthenticated || !sessionExpiry || now > new Date(sessionExpiry)) {
-        // Session expired or not authenticated, clear session and redirect to login
+        // La session a expiré ou l'utilisateur n'est pas authentifié, effacer la session et rediriger vers login.html
         localStorage.removeItem('isAuthenticated');
         localStorage.removeItem('sessionExpiry');
         window.location.href = 'login.html';
     } else {
-        // Extend the session for another minute on page load
-        const newExpiryTime = new Date(now.getTime() + 1*60*1000); // 1 minute from now
+        // Étendre la session pour une autre minute lors du chargement de la page
+        const newExpiryTime = new Date(now.getTime() + 1*60*1000); // 1 minute à partir de maintenant
         localStorage.setItem('sessionExpiry', newExpiryTime.toISOString());
 
-        // Display authentication and session details for debugging
+        // Afficher les détails d'authentification et de session pour le débogage
         displayAuthDetails();
     }
 };
@@ -31,19 +31,23 @@ window.onload = function() {
 function displayAuthDetails() {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     const sessionExpiry = localStorage.getItem('sessionExpiry');
-    // Example: Displaying isAuthenticated and sessionExpiry. Add more details as needed.
+    const userName = localStorage.getItem('userName'); // Supposons que cela a été stocké
+    const userEmail = localStorage.getItem('userEmail'); // Supposons que cela a été stocké
+    
+    // Exemple : Affichage de isAuthenticated, sessionExpiry, et détails de l'utilisateur. Ajouter plus de détails au besoin.
     document.getElementById('authDetails').innerHTML = `
-        <p>Authenticated: ${isAuthenticated}</p>
-        <p>Session Expires: ${sessionExpiry}</p>
+        <p>Authentifié : ${isAuthenticated}</p>
+        <p>Expiration de la session : ${sessionExpiry}</p>
+        <p>Nom de l'utilisateur : ${userName}</p>
+        <p>Email de l'utilisateur : ${userEmail}</p>
     `;
 }
-
 </script>
-<h1>Protected Content</h1>
-<p>If you're seeing this, you're authenticated and your session is valid.</p>
+<h1>Contenu Protégé</h1>
+<p>Si vous voyez ceci, vous êtes authentifié et votre session est valide.</p>
 
 <div id="authDetails">
-    <!-- Authentication details will be displayed here -->
+    <!-- Les détails d'authentification seront affichés ici -->
 </div>
 
 </body>
