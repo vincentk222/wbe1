@@ -17,7 +17,7 @@
     const urlParams = new URLSearchParams(queryString);
     const code = urlParams.get('code');
 
-    console.log('Code html:'code);
+    console.log('Code html:', code);
     if (code) {
       requestAccessToken(code);
     } else {
