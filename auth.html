@@ -8,46 +8,72 @@
 </head>
 <body>
 <script>
-    const clientID = localStorage.getItem('clientID');
-    const tenantID = localStorage.getItem('tenantID');
-    const authority = `https://login.microsoftonline.com/${tenantID}`;
-
+    const clientId = localStorage.getItem('clientID');
+    const tenantId = localStorage.getItem('tenantID');
     const msalConfig = {
         auth: {
-            clientId: clientID,
-            authority: authority,
+            clientId: clientId,
+            authority: `https://login.microsoftonline.com/${tenantId}`,
             redirectUri: window.location.origin + "/auth.html"
         }
     };
 
     const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
-    myMSALObj.handleRedirectPromise().then(response => {
+    function handleResponse(response) {
         if (response !== null) {
-            myMSALObj.acquireTokenSilent({
-                scopes: ["User.Read"],
-                account: response.account
-            }).then(tokenResponse => {
-                fetch("https://graph.microsoft.com/v1.0/me", {
-                    headers: {
-                        "Authorization": `Bearer ${tokenResponse.accessToken}`
-                    }
-                })
-                .then(resp => resp.json())
-                .then(data => {
-                    localStorage.setItem('isAuthenticated', 'true');
-                    localStorage.setItem('userName', data.displayName);
-                    localStorage.setItem('userEmail', data.mail);
-                    window.location.href = 'test.html';
-                });
-            });
+            acquireTokenSilent(response.account);
         } else {
-            window.location.href = 'login.html';
+            /**
+             * La partie de votre code ici est cruciale. Vous devez extraire le code depuis l'URL actuelle.
+             * Cependant, ce processus est automatiquement géré par MSAL dans handleRedirectPromise.
+             */
+            myMSALObj.handleRedirectPromise().then(handleResponse).catch(err => {
+                console.error(err);
+            });
         }
-    }).catch(error => {
-        console.error(error);
-        window.location.href = 'login.html';
-    });
+    }
+
+    function acquireTokenSilent(account) {
+        const silentRequest = {
+            scopes: ["User.Read"],
+            account: account
+        };
+
+        myMSALObj.acquireTokenSilent(silentRequest).then(tokenResponse => {
+            callMSGraph("https://graph.microsoft.com/v1.0/me", tokenResponse.accessToken, updateUI);
+        }).catch(err => {
+            console.error(err);
+            // Vous pouvez également inclure une logique pour acquérir un token via acquireTokenPopup ici en cas d'échec de acquireTokenSilent
+        });
+    }
+
+    function callMSGraph(endpoint, token, callback) {
+        const headers = new Headers();
+        const bearer = `Bearer ${token}`;
+
+        headers.append("Authorization", bearer);
+
+        const options = {
+            method: "GET",
+            headers: headers
+        };
+
+        fetch(endpoint, options)
+            .then(response => response.json())
+            .then(response => callback(response))
+            .catch(error => console.error(error));
+    }
+
+    function updateUI(data) {
+        // Mettez à jour l'interface utilisateur avec les données de l'utilisateur
+        console.log(data);
+        // Par exemple, affichez le nom de l'utilisateur
+        document.body.innerHTML += `<p>Nom: ${data.displayName}</p>`;
+        document.body.innerHTML += `<p>Email: ${data.mail || data.userPrincipalName}</p>`;
+    }
+
+    handleResponse(null);
 </script>
 </body>
 </html>
