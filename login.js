@@ -48,14 +48,18 @@ function saveValues() {
 
 // Read the input values from localStorage
 function readValues() {
-  const clientId = localStorage.getItem('clientId');
-  const tenantId = localStorage.getItem('tenantId');
-  const scope = localStorage.getItem('scope');
-
-  console.log('ClientID:', clientId);
-  console.log('TenantID:', tenantId);
-  console.log('Scope:', scope);
-}
+    const clientId = localStorage.getItem('clientId');
+    const tenantId = localStorage.getItem('tenantId');
+    const scope = localStorage.getItem('scope');
+  
+    console.log('ClientID:', clientId);
+    console.log('TenantID:', tenantId);
+    console.log('Scope:', scope);
+  
+    if (clientId) document.getElementById('clientIdInput').value = clientId;
+    if (tenantId) document.getElementById('tenantIdInput').value = tenantId;
+    if (scope) document.getElementById('scopeInput').value = scope;
+  }
 
 // Clear the input fields
 function deleteValues() {
