@@ -30,11 +30,17 @@ function displaySessionInfo() {
 }
 
 function displayUserInfo() {
-    // Example: Retrieve and display user info from ID token
     const idToken = localStorage.getItem('idToken'); // Assuming the token is stored here
     if (idToken) {
         const parsedToken = parseJwt(idToken);
-        document.getElementById('userInfo').innerHTML = 'User: ' + parsedToken.name + ' (Email: ' + parsedToken.email + ')';
+        const userInfoElement = document.getElementById('userInfo');
+        userInfoElement.innerHTML = ''; // Clear previous content
+        Object.entries(parsedToken).forEach(([key, value]) => {
+            // Create a new div for each key-value pair and append to userInfoElement
+            const div = document.createElement('div');
+            div.textContent = `${key}: ${value}`;
+            userInfoElement.appendChild(div);
+        });
     } else {
         document.getElementById('userInfo').innerHTML = 'No user information found.';
     }
