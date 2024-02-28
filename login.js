@@ -7,11 +7,9 @@ function generateCodeVerifierAndChallenge() {
       throw new Error('Invalid code_challenge length');
     }
   
-    // Show the values in a popup using alert()
-    alert(`Code Verifier: ${codeVerifier}\nCode Challenge: ${codeChallenge}`);
-  
     return { codeVerifier, codeChallenge };
   }
+  
   
 
 // Generate a state and a nonce for security purposes
