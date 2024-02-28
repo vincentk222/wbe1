@@ -7,73 +7,40 @@
     <script src="https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js" integrity="sha384-+vJGnYt4zLXAClD9H+6jLpM9G5SfnwWlWlYvT7l0jX4Hj5QfZIvdia5VnR6bnX8w" crossorigin="anonymous"></script>
 </head>
 <body>
-<script>
-    const clientId = localStorage.getItem('clientID');
-    const tenantId = localStorage.getItem('tenantID');
-    const msalConfig = {
-        auth: {
-            clientId: clientId,
-            authority: `https://login.microsoftonline.com/${tenantId}`,
-            redirectUri: window.location.origin + "/auth.html"
-        }
-    };
-
-    const myMSALObj = new msal.PublicClientApplication(msalConfig);
-
-    function handleResponse(response) {
-        if (response !== null) {
-            acquireTokenSilent(response.account);
-        } else {
-            /**
-             * La partie de votre code ici est cruciale. Vous devez extraire le code depuis l'URL actuelle.
-             * Cependant, ce processus est automatiquement géré par MSAL dans handleRedirectPromise.
-             */
-            myMSALObj.handleRedirectPromise().then(handleResponse).catch(err => {
-                console.error(err);
-            });
-        }
-    }
-
-    function acquireTokenSilent(account) {
-        const silentRequest = {
-            scopes: ["User.Read"],
-            account: account
+    <script>
+        const msalConfig = {
+            auth: {
+                clientId: localStorage.getItem('clientID'),
+                authority: `https://login.microsoftonline.com/${localStorage.getItem('tenantID')}`,
+                redirectUri: window.location.origin + "/auth.html"
+            }
         };
-
-        myMSALObj.acquireTokenSilent(silentRequest).then(tokenResponse => {
-            callMSGraph("https://graph.microsoft.com/v1.0/me", tokenResponse.accessToken, updateUI);
+    
+        const myMSALObj = new msal.PublicClientApplication(msalConfig);
+        
+        myMSALObj.handleRedirectPromise().then(response => {
+            if (response) {
+                const account = response.account;
+                myMSALObj.acquireTokenSilent({
+                    scopes: ["User.Read"],
+                    account: account
+                }).then(response => {
+                    // Avec le token, appelez Microsoft Graph API pour récupérer les infos utilisateur
+                    console.log(response);
+                    // Traitez la réponse ici
+                }).catch(err => {
+                    // Gestion des erreurs
+                    console.error(err);
+                });
+            } else {
+                // Gestion de l'absence de réponse de redirection
+                console.log("Aucune réponse de redirection. L'utilisateur pourrait charger la page directement ou la réponse de connexion est dans le cache.");
+            }
         }).catch(err => {
+            // Gestion des erreurs lors de la capture de la réponse de redirection
             console.error(err);
-            // Vous pouvez également inclure une logique pour acquérir un token via acquireTokenPopup ici en cas d'échec de acquireTokenSilent
         });
-    }
-
-    function callMSGraph(endpoint, token, callback) {
-        const headers = new Headers();
-        const bearer = `Bearer ${token}`;
-
-        headers.append("Authorization", bearer);
-
-        const options = {
-            method: "GET",
-            headers: headers
-        };
-
-        fetch(endpoint, options)
-            .then(response => response.json())
-            .then(response => callback(response))
-            .catch(error => console.error(error));
-    }
-
-    function updateUI(data) {
-        // Mettez à jour l'interface utilisateur avec les données de l'utilisateur
-        console.log(data);
-        // Par exemple, affichez le nom de l'utilisateur
-        document.body.innerHTML += `<p>Nom: ${data.displayName}</p>`;
-        document.body.innerHTML += `<p>Email: ${data.mail || data.userPrincipalName}</p>`;
-    }
-
-    handleResponse(null);
-</script>
+    </script>
+    
 </body>
 </html>
