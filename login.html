@@ -4,27 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-decode/3.1.2/jwt-decode.min.js"></script>
-  <script src="login.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div>
-    <label for="clientIdInput">ClientID:</label>
-    <input type="text" id="clientIdInput" />
-  </div>
-  <div>
-    <label for="tenantIdInput">TenantID:</label>
-    <input type="text" id="tenantIdInput" />
-  </div>
-  <div>
+  <div class="container">
+    <h1>Login</h1>
+    <label for="clientIdInput">Client ID:</label>
+    <input type="text" id="clientIdInput" value="" />
+    <br />
+    <label for="tenantIdInput">Tenant ID:</label>
+    <input type="text" id="tenantIdInput" value="" />
+    <br />
     <label for="scopeInput">Scope:</label>
-    <input type="text" id="scopeInput" />
+    <input type="text" id="scopeInput" value="" />
+    <br />
+    <button onclick="initiateLogin()">Login</button>
+    <button onclick="readValues()">Read</button>
+    <button onclick="deleteValues()">Delete</button>
+    <button onclick="saveValues()">Save</button>
   </div>
-  <button onclick="initiateLogin()">Login</button>
-  <button onclick="readValues()">Read</button>
-  <button onclick="deleteValues()">Delete</button>
-  <button onclick="saveValues()">Save</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>
