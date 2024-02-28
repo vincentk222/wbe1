@@ -12,6 +12,14 @@ function generateCodeVerifierAndChallenge() {
     return { state, nonce };
   }
   
+  function generateCodeVerifierAndChallenge() {
+    // ...
+  }
+  
+  function generateStateAndNonce() {
+    // ...
+  }
+  
   async function initiateLogin() {
     const { codeVerifier, codeChallenge } = generateCodeVerifierAndChallenge();
     sessionStorage.setItem('code_verifier', codeVerifier);
@@ -20,43 +28,41 @@ function generateCodeVerifierAndChallenge() {
     sessionStorage.setItem('nonce', nonce);
     Cookies.set('oauth_state', state, { secure: true, sameSite: 'strict' });
   
-    const authEndpoint = 'https://login.microsoftonline.com/{tenantID}/oauth2/v2.0/authorize';
-    const clientID = 'your_client_id';
-    const redirectUri = 'https://test.vko.ovh/auth.html';
-    const scope = 'your_scope';
+    const clientIdInput = document.getElementById('clientIdInput').value;
+    const tenantIdInput = document.getElementById('tenantIdInput').value;
+    const scopeInput = document.getElementById('scopeInput').value;
   
-    const loginUrl = `${authEndpoint}?client_id=${clientID}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}&nonce=${nonce}`;
+    const authEndpoint = `https://login.microsoftonline.com/${tenantIdInput}/oauth2/v2.0/authorize`;
+    const redirectUri = 'https://test.vko.ovh/auth.html';
+  
+    const loginUrl = `${authEndpoint}?client_id=${clientIdInput}&response_type=code&redirect_uri=${redirectUri}&scope=${scopeInput}&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}&nonce=${nonce}`;
   
     window.location.href = loginUrl;
   }
   
-  // This function should be called in auth.html after exchanging the authorization code for an ID token.
-  function verifyStateAndNonceAndProceed(idToken) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const receivedState = urlParams.get('state');
-    const storedState = Cookies.get('oauth_state');
+  function readValues() {
+    const clientId = document.getElementById('clientIdInput').value;
+    const tenantId = document.getElementById('tenantIdInput').value;
+    const scope = document.getElementById('scopeInput').value;
   
-    if (receivedState !== storedState) {
-      // State values do not match. Reject the request and terminate the authentication process.
-      console.error('Invalid state. Possible CSRF attack.');
-      return;
-    }
+    console.log('ClientID:', clientId);
+    console.log('TenantID:', tenantId);
+    console.log('Scope:', scope);
+  }
   
-    const storedNonce = sessionStorage.getItem('nonce');
-    const decodedIdToken = jwt_decode(idToken);
-    const receivedNonce = decodedIdToken.nonce;
+  function deleteValues() {
+    document.getElementById('clientIdInput').value = '';
+    document.getElementById('tenantIdInput').value = '';
+    document.getElementById('scopeInput').value = '';
+  }
   
-    if (receivedNonce !== storedNonce) {
-      // Nonce values do not match. Reject the ID token and terminate the authentication process.
-      console.error('Invalid nonce. Possible token replay attack.');
-      return;
-    }
+  function saveValues() {
+    const clientId = document.getElementById('clientIdInput').value;
+    const tenantId = document.getElementById('tenantIdInput').value;
+    const scope = document.getElementById('scopeInput').value;
   
-    // State and nonce values match. Proceed with the authentication process.
-    // ...
-  
-    // Remove the state cookie and nonce from session storage after use.
-    Cookies.remove('oauth_state');
-    sessionStorage.removeItem('nonce');
+    sessionStorage.setItem('clientId', clientId);
+    sessionStorage.setItem('tenantId', tenantId);
+    sessionStorage.setItem('scope', scope);
   }
   
