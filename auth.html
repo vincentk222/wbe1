@@ -1,21 +1,29 @@
 <!-- auth.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication</title>
+    <title>Authentification</title>
 </head>
 <body>
 <script>
-// Simulate authentication success and setting session expiry to 1 minute from now
-localStorage.setItem('isAuthenticated', 'true');
-const now = new Date();
-const expiryTime = new Date(now.getTime() + 1*60*1000); // 1 minute from now
-localStorage.setItem('sessionExpiry', expiryTime.toISOString());
+    const returnedState = new URLSearchParams(window.location.search).get('state');
+    const originalState = localStorage.getItem('oauthState');
 
-// Redirect to a protected page or home page after setting the session
-window.location.href = 'test.html';
+    if (returnedState && returnedState === originalState) {
+        console.log("La vérification CSRF a réussi.");
+        // Procéder à l'échange du code d'autorisation contre un token, etc.
+        // Supposer que l'authentification et la récupération des informations de l'utilisateur ont réussi
+        localStorage.setItem('isAuthenticated', 'true');
+        // Rediriger vers une page protégée ou la page d'accueil
+        window.location.href = 'test.html';
+    } else {
+        console.error("Erreur de vérification CSRF. Redirection vers la page de connexion.");
+        window.location.href = 'login.html';
+    }
+
+    // Nettoyer la valeur `state` stockée
+    localStorage.removeItem('oauthState');
 </script>
 </body>
 </html>
