@@ -59,14 +59,4 @@ async function requestAccessToken(code) {
     messageElement.textContent = `Hello, ${userInfo.name}! Your email is ${userInfo.email}.`;
   }
   
-  // Call the requestAccessToken function with the authorization code from the URL
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const code = urlParams.get('code');
-
-  if (code) {
-    requestAccessToken(code);
-  } else {
-    console.error('Authorization code not found in the URL.');
-  }
   
