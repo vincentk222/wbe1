@@ -6,7 +6,10 @@ async function requestAccessToken(code) {
     const codeVerifier = sessionStorage.getItem('code_verifier');
   
     const tokenEndpoint = `https://login.microsoftonline.com/${tenantIdInput}/oauth2/v2.0/token`;
-  
+    console.log('tokenEndpoint:', tokenEndpoint);
+
+    
+
     const body = new URLSearchParams();
     body.append('grant_type', 'authorization_code');
     body.append('client_id', clientIdInput);
