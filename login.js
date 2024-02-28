@@ -1,10 +1,14 @@
-// Generate a code verifier and a code challenge for PKCE
 function generateCodeVerifierAndChallenge() {
-  const codeVerifier = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const codeChallenge = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64URL);
-
-  return { codeVerifier, codeChallenge };
-}
+    const codeVerifier = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const codeChallenge = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64URL);
+  
+    // Ensure the code_challenge has a minimum length of 43 characters and a maximum length of 128 characters
+    if (codeChallenge.length < 43 || codeChallenge.length > 128) {
+      throw new Error('Invalid code_challenge length');
+    }
+  
+    return { codeVerifier, codeChallenge };
+  }
 
 // Generate a state and a nonce for security purposes
 function generateStateAndNonce() {
