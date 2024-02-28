@@ -4,26 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Authentification</title>
+    <script src="https://alcdn.msauth.net/browser/2.13.1/js/msal-browser.min.js" integrity="sha384-+vJGnYt4zLXAClD9H+6jLpM9G5SfnwWlWlYvT7l0jX4Hj5QfZIvdia5VnR6bnX8w" crossorigin="anonymous"></script>
 </head>
 <body>
 <script>
-    const returnedState = new URLSearchParams(window.location.search).get('state');
-    const originalState = localStorage.getItem('oauthState');
+    const clientID = localStorage.getItem('clientID');
+    const tenantID = localStorage.getItem('tenantID');
+    const authority = `https://login.microsoftonline.com/${tenantID}`;
 
-    if (returnedState && returnedState === originalState) {
-        console.log("La vérification CSRF a réussi.");
-        // Procéder à l'échange du code d'autorisation contre un token, etc.
-        // Supposer que l'authentification et la récupération des informations de l'utilisateur ont réussi
-        localStorage.setItem('isAuthenticated', 'true');
-        // Rediriger vers une page protégée ou la page d'accueil
-        window.location.href = 'test.html';
-    } else {
-        console.error("Erreur de vérification CSRF. Redirection vers la page de connexion.");
+    const msalConfig = {
+        auth: {
+            clientId: clientID,
+            authority: authority,
+            redirectUri: window.location.origin + "/auth.html"
+        }
+    };
+
+    const myMSALObj = new msal.PublicClientApplication(msalConfig);
+
+    myMSALObj.handleRedirectPromise().then(response => {
+        if (response !== null) {
+            myMSALObj.acquireTokenSilent({
+                scopes: ["User.Read"],
+                account: response.account
+            }).then(tokenResponse => {
+                fetch("https://graph.microsoft.com/v1.0/me", {
+                    headers: {
+                        "Authorization": `Bearer ${tokenResponse.accessToken}`
+                    }
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    localStorage.setItem('isAuthenticated', 'true');
+                    localStorage.setItem('userName', data.displayName);
+                    localStorage.setItem('userEmail', data.mail);
+                    window.location.href = 'test.html';
+                });
+            });
+        } else {
+            window.location.href = 'login.html';
+        }
+    }).catch(error => {
+        console.error(error);
         window.location.href = 'login.html';
-    }
-
-    // Nettoyer la valeur `state` stockée
-    localStorage.removeItem('oauthState');
+    });
 </script>
 </body>
 </html>
