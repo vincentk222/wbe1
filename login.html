@@ -4,23 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login Page</title>
+<link rel="stylesheet" href="style.css">
 <script src="login.js"></script>
 </head>
 <body>
 
-<div style="text-align:center; margin-top:20px;">
-    <label for="clientID">Client ID:</label>
-    <input type="text" id="clientID"><br><br>
-    <label for="tenantID">Tenant ID:</label>
-    <input type="text" id="tenantID"><br><br>
+<div class="background">
+    <div class="container">
+        <input type="text" id="clientID" placeholder="Client ID"><br>
+        <input type="text" id="tenantID" placeholder="Tenant ID"><br>
 
-    <button onclick="clearFields()">Clear</button>
-    <button onclick="readData()">Read</button>
-    <button onclick="saveData()">Save</button>
-    <button onclick="resetSession()">Reset</button>
+        <button onclick="clearFields()">Clear</button>
+        <button onclick="readData()">Read</button>
+        <button onclick="saveData()">Save</button>
+        <button onclick="resetSession()">Reset</button>
 
+        <div id="sessionExpiry">Session expiry information will appear here.</div>
+    </div>
 </div>
-<div id="sessionExpiry" style="margin-top: 20px;">Session expiry information will appear here.</div>
 
 </body>
 </html>
