@@ -1,12 +1,14 @@
-function generateCodeVerifierAndChallenge() {
-    const codeVerifier = '12345678901234567890123456789012'; // Fixed 32-character code_verifier
-    const codeChallenge = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64URL).substring(0, 43); // Fixed 43-character code_challenge
-  
-    alert(`codeVerifier: ${codeVerifier}\ncodeChallenge: ${codeChallenge}`);
+async function generateCodeVerifierAndChallenge() {
+  const codeVerifier = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(CryptoJS.lib.WordArray.random(32).toString()));
+  const codeVerifierBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(codeVerifier)));
+  const codeVerifierBase64URL = codeVerifierBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
+  const codeChallenge = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifierBase64URL));
+  const codeChallengeBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(codeChallenge)));
+  const codeChallengeBase64URL = codeChallengeBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
-    return { codeVerifier, codeChallenge };
-  }
+  return { codeVerifier: codeVerifierBase64URL, codeChallenge: codeChallengeBase64URL };
+}
   
   
 
