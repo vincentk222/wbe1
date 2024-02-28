@@ -12,13 +12,6 @@ function generateCodeVerifierAndChallenge() {
     return { state, nonce };
   }
   
-  function generateCodeVerifierAndChallenge() {
-    // ...
-  }
-  
-  function generateStateAndNonce() {
-    // ...
-  }
   
   async function initiateLogin() {
     const { codeVerifier, codeChallenge } = generateCodeVerifierAndChallenge();
@@ -41,28 +34,37 @@ function generateCodeVerifierAndChallenge() {
   }
   
   function readValues() {
-    const clientId = document.getElementById('clientIdInput').value;
-    const tenantId = document.getElementById('tenantIdInput').value;
-    const scope = document.getElementById('scopeInput').value;
+    // Read the values from localStorage
+    const clientId = localStorage.getItem('clientId');
+    const tenantId = localStorage.getItem('tenantId');
+    const scope = localStorage.getItem('scope');
   
     console.log('ClientID:', clientId);
     console.log('TenantID:', tenantId);
     console.log('Scope:', scope);
   }
-  
+    
   function deleteValues() {
+    // Clear the values from localStorage
+    localStorage.removeItem('clientId');
+    localStorage.removeItem('tenantId');
+    localStorage.removeItem('scope');
+  
+    // Clear the input fields
     document.getElementById('clientIdInput').value = '';
     document.getElementById('tenantIdInput').value = '';
     document.getElementById('scopeInput').value = '';
   }
+  
   
   function saveValues() {
     const clientId = document.getElementById('clientIdInput').value;
     const tenantId = document.getElementById('tenantIdInput').value;
     const scope = document.getElementById('scopeInput').value;
   
-    sessionStorage.setItem('clientId', clientId);
-    sessionStorage.setItem('tenantId', tenantId);
-    sessionStorage.setItem('scope', scope);
+    // Save the values to localStorage
+    localStorage.setItem('clientId', clientId);
+    localStorage.setItem('tenantId', tenantId);
+    localStorage.setItem('scope', scope);
   }
-  
+    
