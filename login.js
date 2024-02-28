@@ -1,7 +1,11 @@
 const loginForm = document.getElementById("loginForm");
 const clientIDInput = document.getElementById("clientID");
 const tenantIDInput = document.getElementById("tenantID");
+const passwordInput = document.getElementById("password");
 const loginButton = document.getElementById("loginButton");
+const saveButton = document.getElementById("saveButton");
+const readButton = document.getElementById("readButton");
+const clearButton = document.getElementById("clearButton");
 
 const encryptData = (clientID, tenantID, password) => {
   // Use the CryptoJS library to encrypt the data
@@ -10,13 +14,13 @@ const encryptData = (clientID, tenantID, password) => {
     password
   ).toString();
 
-  // Store the encrypted data in session storage
-  sessionStorage.setItem("encryptedData", encryptedData);
+  // Store the encrypted data in local storage
+  localStorage.setItem("encryptedData", encryptedData);
 };
 
 const decryptData = password => {
-  // Get the encrypted data from session storage
-  const encryptedData = sessionStorage.getItem("encryptedData");
+  // Get the encrypted data from local storage
+  const encryptedData = localStorage.getItem("encryptedData");
 
   if (!encryptedData) {
     return null;
@@ -32,12 +36,12 @@ const decryptData = password => {
 };
 
 const checkEncryptedData = () => {
-  // Check if encrypted data exists in session storage
-  const encryptedData = sessionStorage.getItem("encryptedData");
+  // Check if encrypted data exists in local storage
+  const encryptedData = localStorage.getItem("encryptedData");
 
   if (encryptedData) {
     // If encrypted data exists, try to decrypt it
-    const decryptedData = decryptData(password);
+    const decryptedData = decryptData(passwordInput.value);
 
     if (decryptedData) {
       // If decryption was successful, populate the input fields
@@ -48,32 +52,65 @@ const checkEncryptedData = () => {
       loginButton.disabled = false;
     } else {
       // If decryption failed, clear the encrypted data
-      sessionStorage.removeItem("encryptedData");
+      localStorage.removeItem("encryptedData");
     }
   }
 };
 
-let password;
+const saveData = () => {
+  // Encrypt the data with the password
+  encryptData(clientIDInput.value, tenantIDInput.value, passwordInput.value);
+
+  // Clear the input fields
+  clientIDInput.value = "";
+  tenantIDInput.value = "";
+  passwordInput.value = "";
+
+  // Disable the login button
+  loginButton.disabled = true;
+};
+
+const readData = () => {
+  // Get the decrypted data from local storage
+  const decryptedData = decryptData(passwordInput.value);
+
+  if (decryptedData) {
+    // Populate the input fields with the decrypted data
+    clientIDInput.value = decryptedData.clientID;
+    tenantIDInput.value = decryptedData.tenantID;
+
+    // Enable the login button
+    loginButton.disabled = false;
+  }
+};
+
+const clearData = () => {
+  // Clear the input fields
+  clientIDInput.value = "";
+  tenantIDInput.value = "";
+  passwordInput.value = "";
+
+  // Disable the login button
+  loginButton.disabled = true;
+
+  // Remove the encrypted data from local storage
+  localStorage.removeItem("encryptedData");
+};
 
 loginForm.addEventListener("submit", event => {
   event.preventDefault();
 
-  // Get the password from the input field
-  password = document.getElementById("password").value;
+  // Encrypt the data with the password
+  encryptData(clientIDInput.value, tenantIDInput.value, passwordInput.value);
 
-  if (password) {
-    // Encrypt the data with the password
-    encryptData(clientIDInput.value, tenantIDInput.value, password);
-
-    // Redirect to the index page
-    window.location.href = "index.html";
-  }
+  // Redirect to the index page
+  window.location.href = "index.html";
 });
 
 // Check for encrypted data when the page loads
 checkEncryptedData();
 
-// Clear the encrypted data when the session expires (1 minute)
-setTimeout(() => {
-  sessionStorage.removeItem("encryptedData");
-}, 60 * 1000);
+// Add event listeners for the new buttons
+saveButton.addEventListener("click", saveData);
+readButton.addEventListener("click", readData);
+clearButton.addEventListener("click", clearData);
