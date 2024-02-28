@@ -9,6 +9,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-decode/3.1.2/jwt-decode.min.js"></script>
   <script src="login.js"></script>
 </head>
-<body onload="initiateLogin()">
+<body>
+  <div>
+    <label for="clientIdInput">ClientID:</label>
+    <input type="text" id="clientIdInput" />
+  </div>
+  <div>
+    <label for="tenantIdInput">TenantID:</label>
+    <input type="text" id="tenantIdInput" />
+  </div>
+  <div>
+    <label for="scopeInput">Scope:</label>
+    <input type="text" id="scopeInput" />
+  </div>
+  <button onclick="initiateLogin()">Login</button>
+  <button onclick="readValues()">Read</button>
+  <button onclick="deleteValues()">Delete</button>
+  <button onclick="saveValues()">Save</button>
 </body>
 </html>
