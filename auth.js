@@ -40,4 +40,21 @@ async function requestAccessToken(code) {
       console.error(error);
     }
   }
+
+  function extractUserInfo(idToken) {
+    const parts = idToken.split('.');
+    const payload = parts[1];
+    const decodedPayload = JSON.parse(atob(payload));
+  
+    return {
+      name: decodedPayload.name,
+      email: decodedPayload.email,
+      // Add other user information you want to display
+    };
+  }
+  
+  function displayUserInfo(userInfo) {
+    const messageElement = document.getElementById('message');
+    messageElement.textContent = `Hello, ${userInfo.name}! Your email is ${userInfo.email}.`;
+  }
   
