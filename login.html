@@ -39,7 +39,7 @@
             // Azure AD OpenID Connect URL
             const authorizationEndpoint = `https://login.microsoftonline.com/${tenantID}/oauth2/v2.0/authorize`;
             const responseType = 'code';
-            const redirectUri = encodeURIComponent(window.location.origin + '/auth-response.html'); // Ensure you have an auth-response.html to handle the response
+            const redirectUri = encodeURIComponent(window.location.origin + '/auth.html'); // Ensure you have an auth-response.html to handle the response
             const scope = encodeURIComponent('openid profile'); // Include other scopes as needed
             const state = encodeURIComponent('YOUR_UNIQUE_STATE_VALUE'); // Should be a unique session value to mitigate CSRF
             const nonce = encodeURIComponent('YOUR_UNIQUE_NONCE_VALUE'); // Should be a unique value for each request to mitigate token replay attacks
