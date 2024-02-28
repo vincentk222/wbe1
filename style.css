@@ -1,0 +1,27 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('background-image-url.png'); /* Replace 'background-image-url.png' with the actual path to the background image */
+    background-size: cover;
+    background-position: center;
+}
+
+.login-button {
+    padding: 15px 30px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}

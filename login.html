@@ -1,9 +1,10 @@
-<!-- login.html -->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Connexion</title>
 </head>
 <body>
@@ -29,7 +30,7 @@
                 const redirectUri = encodeURIComponent(window.location.origin + '/auth.html');
                 const scope = encodeURIComponent('openid profile');
                 const state = encodeURIComponent(uniqueStateValue);
-                const nonce = encodeURIComponent(generateUniqueState()); // Utiliser une logique similaire pour `nonce`
+                const nonce = encodeURIComponent(generateUniqueState());
 
                 const authUrl = `${authorizationEndpoint}?client_id=${clientID}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&nonce=${nonce}&response_mode=fragment`;
 
