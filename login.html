@@ -2,12 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login Page 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Simple CSS to center the login button */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h2>Login with Microsoft</h2>
-    <button id="loginButton">Login</button>
 
-    <script src="login.js"></script>
+<button class="login-button">Login with Azure</button>
+
+<script>
+// JavaScript to handle login and store/retrieve details
+document.querySelector('.login-button').addEventListener('click', function() {
+    let clientID = localStorage.getItem('clientID') || '';
+    let tenantID = localStorage.getItem('tenantID') || '';
+    
+    clientID = prompt('Enter your Client ID:', clientID);
+    tenantID = prompt('Enter your Tenant ID:', tenantID);
+    
+    if(clientID && tenantID) {
+        localStorage.setItem('clientID', clientID);
+        localStorage.setItem('tenantID', tenantID);
+        // Proceed with authentication logic using clientID and tenantID
+        alert('Authentication details saved. Proceeding with Azure Authentication...');
+    } else {
+        alert('Authentication cancelled or incomplete.');
+    }
+});
+</script>
+
 </body>
 </html>
