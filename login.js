@@ -102,13 +102,17 @@ function getLoginData() {
     };
 }
 
+
 function login() {
     const { clientID, tenantID } = getLoginData();
-    if (!clientID || !tenantID) {
-        alert('Please enter both Client ID and Tenant ID.');
+    const clientSecret = document.getElementById('clientSecret').value; // Capture clientSecret
+
+    if (!clientID || !tenantID || !clientSecret) {
+        alert('Please enter Client ID, Tenant ID, and Client Secret.');
         return;
     }
 
+    // The rest of your login function remains unchanged
     const redirectURI = encodeURIComponent('https://test.vko.ovh/auth.html');
     const scope = encodeURIComponent('openid profile User.Read');
     const responseType = 'code';
