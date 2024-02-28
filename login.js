@@ -95,14 +95,24 @@ function saveData() {
     alert('Data saved successfully.');
 }
 
-function resetSession() {
-    sessionPassword = null;
-    clearTimeout(passwordTimer);
-    alert('Session has been reset.');
-    document.getElementById('sessionExpiry').innerText = 'Session has been reset.';
+function getLoginData() {
+    return {
+        clientID: document.getElementById('clientID').value,
+        tenantID: document.getElementById('tenantID').value
+    };
 }
 
 function login() {
-    alert('Logging in...');
-    // Implement your login logic here
+    const { clientID, tenantID } = getLoginData();
+    if (!clientID || !tenantID) {
+        alert('Please enter both Client ID and Tenant ID.');
+        return;
+    }
+
+    const redirectURI = encodeURIComponent('https://test.vko.ovh/auth.html');
+    const scope = encodeURIComponent('openid profile User.Read');
+    const responseType = 'code';
+    const authURL = `https://login.microsoftonline.com/${tenantID}/oauth2/v2.0/authorize?client_id=${clientID}&response_type=${responseType}&redirect_uri=${redirectURI}&scope=${scope}`;
+
+    window.location.href = authURL;
 }
