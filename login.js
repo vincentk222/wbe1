@@ -38,8 +38,7 @@ async function initiateLogin() {
   const authEndpoint = `https://login.microsoftonline.com/${tenantIdInput}/oauth2/v2.0/authorize`;
   const redirectUri = 'https://test.vko.ovh/auth.html';
 
-  const loginUrl = `${authEndpoint}?client_id=${clientIdInput}&response_type=code&redirect_uri=${redirectUri}&scope=${scopeInput}&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}&nonce=${nonce}`;
-
+  const loginUrl = `${authEndpoint}?client_id=${clientIdInput}&response_type=code&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scopeInput)}&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}&nonce=${nonce}`;
   window.location.href = loginUrl;
 }
 
