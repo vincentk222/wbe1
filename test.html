@@ -1,0 +1,31 @@
+<!-- test.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Page</title>
+</head>
+<body>
+<script>
+window.onload = function() {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const sessionExpiry = localStorage.getItem('sessionExpiry');
+    const now = new Date();
+
+    if (!isAuthenticated || !sessionExpiry || now > new Date(sessionExpiry)) {
+        // Session expired or not authenticated, clear session and redirect to login
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('sessionExpiry');
+        window.location.href = 'login.html';
+    } else {
+        // Extend the session for another minute on page load
+        const newExpiryTime = new Date(now.getTime() + 1*60*1000);
+        localStorage.setItem('sessionExpiry', newExpiryTime.toISOString());
+    }
+};
+</script>
+<h1>Protected Content</h1>
+<p>If you're seeing this, you're authenticated and your session is valid.</p>
+</body>
+</html>

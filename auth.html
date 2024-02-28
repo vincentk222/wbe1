@@ -1,29 +1,21 @@
+<!-- auth.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Authentication Redirect</title>
-    <script>
-window.onload = function() {
-    // Parse the URL fragment to extract the authorization code, state, etc.
-    const authResponse = new URLSearchParams(window.location.hash.substring(1));
-    const code = authResponse.get('code');
-    const state = authResponse.get('state');
-    // Implement state validation here to protect against CSRF
-
-    if (code) {
-        // Proceed to exchange the code for tokens
-        console.log("Authorization code:", code);
-        // Here you'd implement the code exchange step
-    } else {
-        // Handle error or indicate that user is not authenticated
-        console.log("User is not authenticated.");
-    }
-};
-
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication</title>
 </head>
 <body>
-    Processing authentication...
+<script>
+// Simulate authentication success and setting session expiry to 1 minute from now
+localStorage.setItem('isAuthenticated', 'true');
+const now = new Date();
+const expiryTime = new Date(now.getTime() + 1*60*1000); // 1 minute from now
+localStorage.setItem('sessionExpiry', expiryTime.toISOString());
+
+// Redirect to a protected page or home page after setting the session
+window.location.href = 'test.html';
+</script>
 </body>
 </html>
