@@ -58,5 +58,3 @@ async function requestAccessToken(code) {
     const messageElement = document.getElementById('message');
     messageElement.textContent = `Hello, ${userInfo.name}! Your email is ${userInfo.email}.`;
   }
-  
-  
