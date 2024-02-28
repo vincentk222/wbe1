@@ -1,13 +1,13 @@
-function generateCodeVerifierAndChallenge() {
-    const codeVerifier = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    const codeChallenge = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64URL);
+async function generateCodeVerifierAndChallenge() {
+    const codeVerifier = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(CryptoJS.lib.WordArray.random(32).toString()));
+    const codeVerifierBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(codeVerifier)));
+    const codeVerifierBase64URL = codeVerifierBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   
-    // Ensure the code_challenge has a minimum length of 43 characters and a maximum length of 128 characters
-    if (codeChallenge.length < 43 || codeChallenge.length > 128) {
-      throw new Error('Invalid code_challenge length');
-    }
+    const codeChallenge = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifierBase64URL));
+    const codeChallengeBase64 = btoa(String.fromCharCode.apply(null, new Uint8Array(codeChallenge)));
+    const codeChallengeBase64URL = codeChallengeBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   
-    return { codeVerifier, codeChallenge };
+    return { codeVerifier: codeVerifierBase64URL, codeChallenge: codeChallengeBase64URL };
   }
   
   
