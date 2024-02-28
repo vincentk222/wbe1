@@ -1,26 +1,23 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="login.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Login</h1>
-      <form id="loginForm">
-        <label for="clientID">Client ID:</label>
-        <input type="text" id="clientID" name="clientID" required />
-        <label for="tenantID">Tenant ID:</label>
-        <input type="text" id="tenantID" name="tenantID" required />
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <button type="submit" id="loginButton" disabled>Login</button>
-        <button type="button" id="saveButton">Save</button>
-        <button type="button" id="readButton">Read</button>
-        <button type="button" id="clearButton">Clear</button>
-      </form>
-    </div>
-  </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+<script src="login.js"></script>
+</head>
+<body>
+
+<div style="text-align:center; margin-top:20px;">
+    <label for="clientID">Client ID:</label>
+    <input type="text" id="clientID"><br><br>
+    <label for="tenantID">Tenant ID:</label>
+    <input type="text" id="tenantID"><br><br>
+
+    <button onclick="clearFields()">Clear</button>
+    <button onclick="readData()">Read</button>
+    <button onclick="saveData()">Save</button>
+</div>
+
+</body>
 </html>
