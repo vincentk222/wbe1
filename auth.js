@@ -62,7 +62,7 @@ async function requestAccessToken(code) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const code = urlParams.get('code');
-  console.log('Code:', code);
+  console.log('Code js:', code);
 
   if (code) {
     requestAccessToken(code);
