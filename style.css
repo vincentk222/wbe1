@@ -1,20 +1,24 @@
 body {
-    background-image: url('background.jpg');
+    background-image: url("background.jpg");
     background-size: cover;
-    font-family: Arial, sans-serif;
+    background-position: center;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  .login-container {
-    background-color: #fff;
+  .container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin: 5% auto;
-    padding: 20px;
-    width: 300px;
   }
   
   h1 {
     text-align: center;
+    margin-bottom: 20px;
   }
   
   label {
@@ -22,28 +26,24 @@ body {
     margin-bottom: 5px;
   }
   
-  input[type="text"],
-  input[type="password"] {
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 14px;
-    padding: 10px;
-    width: 100%;
   }
   
-  button {
-    background-color: #007bff;
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 3px;
-    color: #fff;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    padding: 10px;
-    width: 100%;
+    transition: background-color 0.3s;
   }
   
-  button:hover {
-    background-color: #0069d9;
+  button[type="submit"]:hover {
+    background-color: #3e8e41;
   }
-  

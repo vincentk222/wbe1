@@ -1,45 +1,79 @@
-const form = document.getElementById('login-form');
-const passwordInput = document.getElementById('password');
-const clientIDInput = document.getElementById('clientID');
-const tenantIDInput = document.getElementById('tenantID');
-const loginButton = document.querySelector('button[type="submit"]');
+const loginForm = document.getElementById("loginForm");
+const clientIDInput = document.getElementById("clientID");
+const tenantIDInput = document.getElementById("tenantID");
+const loginButton = document.getElementById("loginButton");
 
-// Check if clientID and tenantID are already stored in session storage
-const clientID = sessionStorage.getItem('clientID');
-const tenantID = sessionStorage.getItem('tenantID');
+const encryptData = (clientID, tenantID, password) => {
+  // Use the CryptoJS library to encrypt the data
+  const encryptedData = CryptoJS.AES.encrypt(
+    JSON.stringify({ clientID, tenantID }),
+    password
+  ).toString();
 
-if (clientID && tenantID) {
-  // Set the input values
-  clientIDInput.value = clientID;
-  tenantIDInput.value = tenantID;
+  // Store the encrypted data in session storage
+  sessionStorage.setItem("encryptedData", encryptedData);
+};
 
-  // Enable the login button
-  loginButton.disabled = false;
-}
+const decryptData = password => {
+  // Get the encrypted data from session storage
+  const encryptedData = sessionStorage.getItem("encryptedData");
 
-form.addEventListener('submit', e => {
-  e.preventDefault();
+  if (!encryptedData) {
+    return null;
+  }
 
-  // Get the password and encrypt the clientID and tenantID
-  const password = passwordInput.value;
-  const encryptedClientID = encrypt(clientIDInput.value, password);
-  const encryptedTenantID = encrypt(tenantIDInput.value, password);
+  // Use the CryptoJS library to decrypt the data
+  const decryptedData = CryptoJS.AES.decrypt(encryptedData, password);
 
-  // Store the encrypted values in session storage
-  sessionStorage.setItem('clientID', encryptedClientID);
-  sessionStorage.setItem('tenantID', encryptedTenantID);
+  // Parse the decrypted data as JSON
+  const { clientID, tenantID } = JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
 
-  // Set a timeout to clear the session storage after 1 minute
-  setTimeout(() => {
-    sessionStorage.removeItem('clientID');
-    sessionStorage.removeItem('tenantID');
-  }, 60000);
+  return { clientID, tenantID };
+};
 
-  // Redirect to index.html
-  window.location.href = 'index.html';
+const checkEncryptedData = () => {
+  // Check if encrypted data exists in session storage
+  const encryptedData = sessionStorage.getItem("encryptedData");
+
+  if (encryptedData) {
+    // If encrypted data exists, try to decrypt it
+    const decryptedData = decryptData(password);
+
+    if (decryptedData) {
+      // If decryption was successful, populate the input fields
+      clientIDInput.value = decryptedData.clientID;
+      tenantIDInput.value = decryptedData.tenantID;
+
+      // Enable the login button
+      loginButton.disabled = false;
+    } else {
+      // If decryption failed, clear the encrypted data
+      sessionStorage.removeItem("encryptedData");
+    }
+  }
+};
+
+let password;
+
+loginForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  // Get the password from the input field
+  password = document.getElementById("password").value;
+
+  if (password) {
+    // Encrypt the data with the password
+    encryptData(clientIDInput.value, tenantIDInput.value, password);
+
+    // Redirect to the index page
+    window.location.href = "index.html";
+  }
 });
 
-function encrypt(data, password) {
-  // Implement your encryption algorithm here
-  // For example, you could use the CryptoJS library to encrypt the data with AES
-}
+// Check for encrypted data when the page loads
+checkEncryptedData();
+
+// Clear the encrypted data when the session expires (1 minute)
+setTimeout(() => {
+  sessionStorage.removeItem("encryptedData");
+}, 60 * 1000);
