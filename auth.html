@@ -1,1 +1,30 @@
-ok
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+  <script src="auth.js"></script>
+</head>
+<body>
+  <h1>Auth</h1>
+  <p id="message"></p>
+  <script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const code = urlParams.get('code');
+    const state = urlParams.get('state');
+
+    // Check if the state matches the stored state
+    const storedState = Cookies.get('oauth_state');
+    if (state !== storedState) {
+      document.getElementById('message').textContent = 'Error: State does not match.';
+    } else {
+      // Proceed to request an access token
+      requestAccessToken(code);
+    }
+  </script>
+</body>
+</html>
