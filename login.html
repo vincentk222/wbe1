@@ -1,29 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Page</title>
-<script src="login.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-decode/3.1.2/jwt-decode.min.js"></script>
+  <script src="login.js"></script>
 </head>
-<body>
-
-<div style="text-align:center; margin-top:20px;">
-    <label for="clientID">Client ID:</label>
-    <input type="text" id="clientID"><br><br>
-    <label for="tenantID">Tenant ID:</label>
-    <input type="text" id="tenantID"><br><br>
-    <label for="clientSecret">Client Secret:</label>
-    <input type="password" id="clientSecret" placeholder="Client Secret"><br><br>
-
-    <button onclick="clearFields()">Clear</button>
-    <button onclick="readData()">Read</button>
-    <button onclick="saveData()">Save</button>
-    <button onclick="resetSession()">Reset</button>
-    <button id="loginButton" onclick="login()">Login</button>
-
-    <div id="sessionExpiry">Session expiry information will appear here.</div>
-</div>
-
+<body onload="initiateLogin()">
 </body>
 </html>
