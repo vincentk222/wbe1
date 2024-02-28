@@ -23,9 +23,33 @@ function clearFields() {
 }
 
 function readData() {
-    // Implement data decryption and display logic here
-    alert('Read data functionality not implemented.');
+    if (!sessionPassword) {
+        let password = prompt('Enter your password:');
+        setPasswordSession(password);
+    }
+
+    // Retrieve and decrypt the data from localStorage
+    const encryptedClientID = localStorage.getItem('clientID');
+    const encryptedTenantID = localStorage.getItem('tenantID');
+    const encryptedClientSecret = localStorage.getItem('clientSecret'); // Retrieve encrypted clientSecret
+
+    if (encryptedClientID && encryptedTenantID && encryptedClientSecret) {
+        const clientID = decrypt(encryptedClientID, sessionPassword);
+        const tenantID = decrypt(encryptedTenantID, sessionPassword);
+        const clientSecret = decrypt(encryptedClientSecret, sessionPassword); // Decrypt clientSecret
+
+        if (clientID !== null && tenantID !== null && clientSecret !== null) {
+            document.getElementById('clientID').value = clientID;
+            document.getElementById('tenantID').value = tenantID;
+            document.getElementById('clientSecret').value = clientSecret; // Display decrypted clientSecret
+        } else {
+            alert('Decryption failed. Check the password and try again.');
+        }
+    } else {
+        alert('No data found. Please save your credentials first.');
+    }
 }
+
 
 function saveData() {
     const clientID = document.getElementById('clientID').value;
@@ -37,8 +61,16 @@ function saveData() {
         return;
     }
 
-    // Simulate encryption and saving data logic using clientSecret
-    alert('Save data functionality not implemented.');
+    // Encrypting the values before storing them
+    const encryptedClientID = encrypt(clientID, sessionPassword);
+    const encryptedTenantID = encrypt(tenantID, sessionPassword);
+    const encryptedClientSecret = encrypt(clientSecret, sessionPassword); // Encrypt clientSecret similarly
+
+    localStorage.setItem('clientID', encryptedClientID);
+    localStorage.setItem('tenantID', encryptedTenantID);
+    localStorage.setItem('clientSecret', encryptedClientSecret); // Store encrypted clientSecret
+
+    alert('Data saved successfully.');
 }
 
 function resetSession() {
