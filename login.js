@@ -1,8 +1,3 @@
-// Import the required libraries
-import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie';
-import jwt_decode from 'jwt-decode';
-
 // Generate a code verifier and a code challenge for PKCE
 function generateCodeVerifierAndChallenge() {
   const codeVerifier = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
