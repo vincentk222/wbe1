@@ -6,6 +6,14 @@
 </head>
 <body>
     <h1>Welcome to the Viewer Page</h1>
-    <script src="viewer.js"></script>
+    <script>
+        document.addEventListener('click', function() {
+            if (localStorage.getItem('isAuthenticated')) {
+                const now = new Date();
+                const newExpiryTime = new Date(now.getTime() + 1*60*1000); // Extend session by 1 minute
+                localStorage.setItem('sessionExpiry', newExpiryTime.toISOString());
+            }
+        });
+        </script>
 </body>
 </html>
