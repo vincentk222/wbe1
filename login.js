@@ -35,7 +35,7 @@ async function initiateLogin() {
   const tenantIdInput = document.getElementById('tenantIdInput').value;
   const scopeInput = document.getElementById('scopeInput').value;
 
-  alert(`Tenant ID: ${tenantIdInput}\Client ID: ${clientIdInput}`);
+  alert(`Tenant ID: ${tenantIdInput}\nClient ID: ${clientIdInput}`);
 
   const authEndpoint = `https://login.microsoftonline.com/${tenantIdInput}/oauth2/v2.0/authorize`;
   const redirectUri = 'https://test.vko.ovh/auth.html';
