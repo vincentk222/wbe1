@@ -1,99 +1,62 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const inputs = document.querySelectorAll('#clientID, #tenantID, #clientSecret');
-    const loginButton = document.getElementById('loginButton');
-
-    function updateLoginButtonState() {
-        const clientID = document.getElementById('clientID').value;
-        const tenantID = document.getElementById('tenantID').value;
-        const clientSecret = document.getElementById('clientSecret').value;
-        loginButton.disabled = !clientID || !tenantID || !clientSecret;
+function generateCodeVerifierAndChallenge() {
+    const codeVerifier = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const codeChallenge = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64URL);
+  
+    return { codeVerifier, codeChallenge };
+  }
+  
+  function generateStateAndNonce() {
+    const state = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const nonce = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  
+    return { state, nonce };
+  }
+  
+  async function initiateLogin() {
+    const { codeVerifier, codeChallenge } = generateCodeVerifierAndChallenge();
+    sessionStorage.setItem('code_verifier', codeVerifier);
+  
+    const { state, nonce } = generateStateAndNonce();
+    sessionStorage.setItem('nonce', nonce);
+    Cookies.set('oauth_state', state, { secure: true, sameSite: 'strict' });
+  
+    const authEndpoint = 'https://login.microsoftonline.com/{tenantID}/oauth2/v2.0/authorize';
+    const clientID = 'your_client_id';
+    const redirectUri = 'https://test.vko.ovh/auth.html';
+    const scope = 'your_scope';
+  
+    const loginUrl = `${authEndpoint}?client_id=${clientID}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&code_challenge=${codeChallenge}&code_challenge_method=S256&state=${state}&nonce=${nonce}`;
+  
+    window.location.href = loginUrl;
+  }
+  
+  // This function should be called in auth.html after exchanging the authorization code for an ID token.
+  function verifyStateAndNonceAndProceed(idToken) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const receivedState = urlParams.get('state');
+    const storedState = Cookies.get('oauth_state');
+  
+    if (receivedState !== storedState) {
+      // State values do not match. Reject the request and terminate the authentication process.
+      console.error('Invalid state. Possible CSRF attack.');
+      return;
     }
-
-    inputs.forEach(input => {
-        input.addEventListener('keyup', updateLoginButtonState);
-    });
-
-    updateLoginButtonState(); // Initial check on page load
-});
-
-function clearFields() {
-    document.getElementById('clientID').value = '';
-    document.getElementById('tenantID').value = '';
-    document.getElementById('clientSecret').value = '';
-}
-
-function readData() {
-    if (!sessionPassword) {
-        let password = prompt('Enter your password:');
-        setPasswordSession(password);
+  
+    const storedNonce = sessionStorage.getItem('nonce');
+    const decodedIdToken = jwt_decode(idToken);
+    const receivedNonce = decodedIdToken.nonce;
+  
+    if (receivedNonce !== storedNonce) {
+      // Nonce values do not match. Reject the ID token and terminate the authentication process.
+      console.error('Invalid nonce. Possible token replay attack.');
+      return;
     }
-
-    // Retrieve and decrypt the data from localStorage
-    const encryptedClientID = localStorage.getItem('clientID');
-    const encryptedTenantID = localStorage.getItem('tenantID');
-    const encryptedClientSecret = localStorage.getItem('clientSecret'); // Retrieve encrypted clientSecret
-
-    if (encryptedClientID && encryptedTenantID && encryptedClientSecret) {
-        const clientID = decrypt(encryptedClientID, sessionPassword);
-        const tenantID = decrypt(encryptedTenantID, sessionPassword);
-        const clientSecret = decrypt(encryptedClientSecret, sessionPassword); // Decrypt clientSecret
-
-        if (clientID !== null && tenantID !== null && clientSecret !== null) {
-            document.getElementById('clientID').value = clientID;
-            document.getElementById('tenantID').value = tenantID;
-            document.getElementById('clientSecret').value = clientSecret; // Display decrypted clientSecret
-        } else {
-            alert('Decryption failed. Check the password and try again.');
-        }
-    } else {
-        alert('No data found. Please save your credentials first.');
-    }
-}
-
-
-function saveData() {
-    const clientID = document.getElementById('clientID').value;
-    const tenantID = document.getElementById('tenantID').value;
-    const clientSecret = document.getElementById('clientSecret').value;
-
-    if (!clientID || !tenantID || !clientSecret) {
-        alert('All fields must be filled.');
-        return;
-    }
-
-    // Encrypting the values before storing them
-    const encryptedClientID = encrypt(clientID, sessionPassword);
-    const encryptedTenantID = encrypt(tenantID, sessionPassword);
-    const encryptedClientSecret = encrypt(clientSecret, sessionPassword); // Encrypt clientSecret similarly
-
-    localStorage.setItem('clientID', encryptedClientID);
-    localStorage.setItem('tenantID', encryptedTenantID);
-    localStorage.setItem('clientSecret', encryptedClientSecret); // Store encrypted clientSecret
-
-    alert('Data saved successfully.');
-}
-
-function resetSession() {
-    // Reset session and display logic here
-    alert('Reset session functionality not implemented.');
-}
-
-function login() {
-    const clientID = document.getElementById('clientID').value;
-    const tenantID = document.getElementById('tenantID').value;
-    const clientSecret = document.getElementById('clientSecret').value;
-
-    if (!clientID || !tenantID || !clientSecret) {
-        alert('Please enter Client ID, Tenant ID, and Client Secret.');
-        return;
-    }
-
-    // Since clientSecret should not be used in client-side for real applications,
-    // this part is illustrative only.
-    const redirectURI = encodeURIComponent('https://test.vko.ovh/auth.html');
-    const scope = encodeURIComponent('openid profile User.Read');
-    const responseType = 'code';
-    const authURL = `https://login.microsoftonline.com/${tenantID}/oauth2/v2.0/authorize?client_id=${clientID}&response_type=${responseType}&redirect_uri=${redirectURI}&scope=${scope}&client_secret=${clientSecret}`; // This is NOT recommended for actual use
-
-    window.location.href = authURL;
-}
+  
+    // State and nonce values match. Proceed with the authentication process.
+    // ...
+  
+    // Remove the state cookie and nonce from session storage after use.
+    Cookies.remove('oauth_state');
+    sessionStorage.removeItem('nonce');
+  }
+  
