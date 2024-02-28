@@ -1,4 +1,4 @@
-function generateFixedCodeVerifierAndChallenge() {
+function generateCodeVerifierAndChallenge() {
     const codeVerifier = '12345678901234567890123456789012'; // Fixed 32-character code_verifier
     const codeChallenge = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64URL).substring(0, 43); // Fixed 43-character code_challenge
   
